@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { meetingRoutes } from './routes/meetings.js';
+import { taskRoutes } from './routes/task.router.js';
 import { authMiddleware } from './auth.middleware.js';
 
 const app = express();
@@ -12,13 +13,13 @@ await mongoose.connect('mongodb://localhost:27017/meetingbot')
 
 app.use(express.json());
 
-// Basic route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the MeetingBot API' });
 });
 
-// Apply auth middleware to all meeting routes
 app.use('/api/meetings', authMiddleware, meetingRoutes);
+app.use('/api/tasks', authMiddleware, taskRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
