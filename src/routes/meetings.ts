@@ -4,7 +4,7 @@ import { AuthenticatedRequest } from '../auth.middleware.js';
 
 export const router = express.Router();
 
-// GET all meetings
+// GET all meetings for user
 router.get('/', async (req: AuthenticatedRequest, res) => {
   try {
     const meetings = await Meeting.find();

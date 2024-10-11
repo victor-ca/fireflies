@@ -1,11 +1,38 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import { AuthenticatedRequest } from '../auth.middleware.js';
 import { Meeting } from '../models/meeting.js';
 import { Task } from '../models/task.js';
-import { DashboardData } from '../types/dashboard.js';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 
-export const router = express.Router();
+interface UpcomingMeeting {
+  _id: Types.ObjectId;
+  title: string;
+  date: Date;
+  participantCount: number;
+}
+
+interface OverdueTask {
+  _id: Types.ObjectId;
+  title: string;
+  dueDate: Date;
+  meetingId: Types.ObjectId;
+  meetingTitle: string;
+}
+
+interface DashboardData {
+  totalMeetings: number;
+  taskSummary: {
+    pending: number;
+    inProgress: number;
+    completed: number;
+  };
+  upcomingMeetings: UpcomingMeeting[];
+  overdueTasks: OverdueTask[];
+}
+
+
+const router = express.Router();
 
 router.get("/", async (req: AuthenticatedRequest, res) => {
   // TODO: fix this
@@ -48,3 +75,5 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
 
   res.json(dashboardData);
 });
+
+export { router as dashboardRoutes };
