@@ -1,6 +1,6 @@
 # Fireflies.ai backend test
 
-This project looks awful, somebody really messed it up. Can you help us fixing it?
+This project looks awful, somebody really messed it up. Can you help us fix it?
 
 ## Instructions
 
@@ -10,10 +10,11 @@ This project looks awful, somebody really messed it up. Can you help us fixing i
 * Organize the project structure to improve maintainability (if you think it's necessary).
 * Add basic error handling and input validation to all endpoints.
 * It seems there is a very critical bug here. Can you spot it?
-* Also, it doesn't look very performant as the meeting count gets bigger. Would it scale?
+* Also, it doesn't look very performant as the meeting count increases. Would it scale?
 * (Bonus) Implement basic unit tests for at least one endpoint.
 
-You should not take more than **2-3 hours** to implement this. 
+It should not take you more than **2-3 hours** to implement this.
+
 
 ### API
 
@@ -56,16 +57,15 @@ Return a summary of the user's meetings, including count and upcoming meetings, 
 
 ### Containerize it!
 
-You should add a Dockerfile, and include clear instructions about how to run this on our local environment. The easier, the better.
-In order to evaluate it, we'll run it on our local hosts, seeding with known data and will compare the output of the requested endpoints.
+You should add a Dockerfile and include clear instructions about how to run this on our local environment. The easier, the better. In order to evaluate it, we'll run it on our local hosts, seeding with known data and will compare the output of the requested endpoints.
 
 
 ## Evaluation Criteria:
 
-We want you to impress us with your attention to details, but some points that will be evaluated are:
+We want you to impress us with your attention to detail, but some points that will be evaluated are:
 
-* Documentation - clear instructions on a README file are other developer's best friend.
-* Code quality and organization - we can only scale if we have high quality, maintainable code 
+* Documentation - clear instructions on a README file are the other developer's best friend.
+* Code quality and organization - we can only scale if we have high-quality, maintainable code
 * Ability to identify and fix the existing bug - security bugs would be a disaster for the company
 * Implementation of the stats (and the bonus, dashboard) endpoints using performant, aggregation queries
 * Error handling and input validation
