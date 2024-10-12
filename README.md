@@ -4,9 +4,17 @@ This project looks awful, somebody really messed it up. Can you help us fix it?
 
 ## Instructions
 
+Create a fork of this repository, and set up the project locally. 
+Ensure that you have MongoDB running locally, and node v22.
+
+```
+npm i
+npm run seed
+npm start
+```
+
 ### Project Setup:
 
-* Clone the provided repository and set up the project.
 * Organize the project structure to improve maintainability (if you think it's necessary).
 * Add basic error handling and input validation to all endpoints.
 * It seems there is a very critical bug here. Can you spot it?
