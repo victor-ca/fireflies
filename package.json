@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm src/server.ts",
-    "seed": "node --loader ts-node/esm src/seed.ts"
+    "start": "node --import=tsx src/server.ts",
+    "seed": "node --import=tsx src/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "@types/node": "^22.7.5",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   }
 }
