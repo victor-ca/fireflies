@@ -30,7 +30,7 @@ By the end of the project, we should have the following endpoints implemented:
 
 * `GET /api/meetings`
 
-Retrieves all the meetings.
+Retrieves all the meetings for the user.
 
 * `POST /api/meetings`
 
