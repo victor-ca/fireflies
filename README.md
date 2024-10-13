@@ -38,7 +38,7 @@ Create a new meeting with title, date, and participants.
 
 * `GET /api/meetings/:id`
 
-Retrieve a specific meeting by ID. Include it's tasks.
+Retrieve a specific meeting by ID. Include its tasks.
 
 * `PUT /api/meetings/:id/transcript`
 
@@ -65,7 +65,8 @@ Return a summary of the user's meetings, including count and upcoming meetings, 
 
 ### Containerize it!
 
-You should add a Dockerfile and include clear instructions about how to run this on our local environment. The easier, the better. In order to evaluate it, we'll run it on our local hosts, seeding with known data and will compare the output of the requested endpoints.
+You should add a Dockerfile and include clear instructions about how to run this on our local environment. The easier, the better. 
+In order to evaluate it, we'll run it on our local hosts, seeding with known data and will compare the output of the requested endpoints.
 
 
 ## Evaluation Criteria:
