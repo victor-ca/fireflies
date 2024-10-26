@@ -1,6 +1,6 @@
 import React from "react";
-import { useFetchAuthenticated } from "../utils/http";
-import { IMeeting } from "../model/meeting.model";
+import { useFetchAuthenticated } from "../../../utils/http";
+import { IMeeting } from "../../../model/meeting.model";
 import "./MeetingList.scss";
 
 const MeetingList: React.FC = () => {
