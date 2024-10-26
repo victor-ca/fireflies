@@ -1,8 +1,7 @@
 import express from "express";
 
 import { AuthenticatedRequest } from "../auth/auth.middleware.js";
-
-import { getDashboardDataByUserId } from "./dashboard.service.js";
+import { getDashboardDataByUserId } from "./getDashboardDataByUserId.js";
 
 const router = express.Router();
 

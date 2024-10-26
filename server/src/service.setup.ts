@@ -1,10 +1,12 @@
 import { MeetingAccessService } from "./auth/meeting-access.service";
-import { MockMeetingAiService } from "./meetings/ai/meeting-ai.service";
-import { MeetingSummarizerService } from "./meetings/ai/meeting-sumarizer.service";
+import { MockMeetingAiService } from "./meetings/services/ai-sumarizer/meeting-ai.service";
+import { MeetingSummarizerService } from "./meetings/services/ai-sumarizer/meeting-sumarizer.service";
 import { MongooseMeetingRepository } from "./meetings/repo/meeting.repository";
-import { SecureMeetingService } from "./meetings/repo/meeting.service";
+import { SecureMeetingService } from "./meetings/services/meeting.service";
 import { MongooseTaskRepository } from "./tasks/repo/tasks.repo";
 import { SecureTaskService } from "./tasks/repo/tasks.service";
+import { SecureMeetingStatsService } from "./meetings/services/meeting-stats.service";
+import { MeetingStatsRepository } from "./meetings/repo/meeting.stats.repo";
 
 const meetingRepository = new MongooseMeetingRepository();
 const taskRepository = new MongooseTaskRepository();
@@ -37,5 +39,12 @@ export const useMeetingSummarizer = (): MeetingSummarizerService => {
     meetingRepository,
     taskRepository,
     new MockMeetingAiService()
+  );
+};
+
+export const useSecureMeetingStatsService = (userId: string | undefined) => {
+  return new SecureMeetingStatsService(
+    new MeetingStatsRepository(),
+    getMeetingAccessService(userId)
   );
 };

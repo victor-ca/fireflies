@@ -6,6 +6,7 @@ import { validateMeetingCreation } from "./meeting.model.js";
 import {
   useMeetingSummarizer,
   useSecureMeetingService,
+  useSecureMeetingStatsService,
 } from "../service.setup.js";
 
 export const router = express.Router();
@@ -21,6 +22,13 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
     page: req.query.page,
     data: meetings,
   });
+});
+
+router.get("/stats", async (req: AuthenticatedRequest, res) => {
+  const stats = await useSecureMeetingStatsService(req.userId).getStats(
+    req.userId!
+  );
+  res.json(stats);
 });
 
 router.get("/:id", async (req: AuthenticatedRequest, res) => {
@@ -64,11 +72,6 @@ router.post(
 router.post("/:id/summarize", async (req: AuthenticatedRequest, res) => {
   await useMeetingSummarizer().summarizeMeeting(req.params.id);
   res.status(201).json({ message: "Meeting summarized" });
-});
-
-router.get("/stats", async (req: AuthenticatedRequest, res) => {
-  const stats = await useSecureMeetingService(req.userId).getStats();
-  res.json(stats);
 });
 
 export { router as meetingRoutes };

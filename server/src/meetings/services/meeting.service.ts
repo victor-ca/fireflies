@@ -2,7 +2,7 @@ import { MeetingAccessService } from "../../auth/meeting-access.service";
 import { MongooseTaskRepository } from "../../tasks/repo/tasks.repo";
 import { ITask } from "../../tasks/task";
 import { IMeeting, IMeetingCreateRequest } from "../meeting.model";
-import { MongooseMeetingRepository } from "./meeting.repository";
+import { MongooseMeetingRepository } from "../repo/meeting.repository";
 
 export class SecureMeetingService {
   constructor(
@@ -55,11 +55,5 @@ export class SecureMeetingService {
       transcript: "",
       summary: "",
     });
-  }
-
-  async getStats() {
-    const userId = this.accessService.getCurrentUserId();
-
-    return this.meetingRepository.getStats(userId);
   }
 }

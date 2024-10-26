@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start:database": "docker compose -f ../dev-ops/docker-compose-dev.yml up -d",
-    "start": "nodemon --exec node --import=tsx src/server.ts",
+    "start": "node --import=tsx src/server.ts",
+    "dev": "nodemon --exec node --import=tsx src/server.ts",
     "seed": "node --import=tsx src/seed.ts"
   },
   "keywords": [],

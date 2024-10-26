@@ -1,26 +1,10 @@
 import { MongooseMeeting } from "../meetings/repo/meeting.mongoose.js";
-import { IMeeting } from "../meetings/meeting.model.js";
-import { ITask } from "../tasks/task.js";
 import { MongooseTask } from "../tasks/repo/tasks.mongoose.js";
-
-type UpcomingMeeting = Pick<IMeeting, "id" | "title" | "date"> & {
-  participantCount: number;
-};
-
-type OverdueTask = Pick<ITask, "id" | "title" | "dueDate" | "meetingId"> & {
-  meetingTitle: string;
-};
-
-type DashboardData = {
-  totalMeetings: number;
-  taskSummary: {
-    pending: number;
-    inProgress: number;
-    completed: number;
-  };
-  upcomingMeetings: UpcomingMeeting[];
-  overdueTasks: OverdueTask[];
-};
+import {
+  DashboardData,
+  OverdueTask,
+  UpcomingMeeting,
+} from "./dashboard.model.js";
 
 const getUpcomingMeetings = async (
   userId: string,

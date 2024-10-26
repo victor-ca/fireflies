@@ -1,4 +1,4 @@
-import { IMeeting } from "../meeting.model";
+import { IMeeting } from "../../meeting.model";
 
 export class MockMeetingAiService {
   private readonly summaries = [

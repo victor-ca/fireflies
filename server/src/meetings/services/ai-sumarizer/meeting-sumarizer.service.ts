@@ -1,8 +1,8 @@
-import { MongooseMeetingRepository } from "../repo/meeting.repository";
-import { MongooseTaskRepository } from "../../tasks/repo/tasks.repo";
+import { MongooseMeetingRepository } from "../../repo/meeting.repository";
+import { MongooseTaskRepository } from "../../../tasks/repo/tasks.repo";
 import { MockMeetingAiService } from "./meeting-ai.service";
 
-import { ITask } from "../../tasks/task";
+import { ITask } from "../../../tasks/task";
 
 export class MeetingSummarizerService {
   constructor(

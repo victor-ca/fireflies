@@ -1,6 +1,6 @@
 import Root from "./Root.tsx";
 import { createBrowserRouter } from "react-router-dom";
-import MeetingList from "./components/meetings/list/MeetingList.tsx";
+import MeetingPage from "./components/meetings/list/MeetingPage.tsx";
 import NewMeeting from "./components/meetings/new/NewMeeting.tsx";
 import SingleMeetingPage from "./components/meetings/single/SingleMeetingPage.tsx";
 import TaskListPage from "./components/tasks/TaskListPage.tsx";
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/meetings",
-        element: <MeetingList />,
+        element: <MeetingPage />,
       },
       {
         path: "/meetings/new",

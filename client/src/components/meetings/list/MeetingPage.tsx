@@ -1,10 +1,11 @@
 import React from "react";
 import { useGetAuthenticated } from "../../../utils/http";
 import { IMeeting } from "../../../model/meeting.model";
-import "./MeetingList.scss";
+import "./MeetingPage.scss";
 import MeetingCard from "./MeetingCard";
+import { MeetingStats } from "./MeetingStats";
 
-const MeetingList: React.FC = () => {
+const MeetingPage: React.FC = () => {
   const { data, isLoading } = useGetAuthenticated<{
     total: number;
     limit: number;
@@ -25,7 +26,10 @@ const MeetingList: React.FC = () => {
 
   return (
     <div id="meeting-list">
-      <h1>Meeting List</h1>
+      <h1>Stats</h1>
+      <MeetingStats />
+
+      <h1>Meetings</h1>
       <div className="meeting-list">
         {meetings.map((meeting) => (
           <MeetingCard key={meeting.id} meeting={meeting} />
@@ -35,4 +39,4 @@ const MeetingList: React.FC = () => {
   );
 };
 
-export default MeetingList;
+export default MeetingPage;
