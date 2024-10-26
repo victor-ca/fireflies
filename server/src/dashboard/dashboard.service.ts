@@ -1,6 +1,7 @@
 import { MongooseMeeting } from "../meetings/repo/meeting.mongoose.js";
 import { IMeeting } from "../meetings/meeting.model.js";
 import { ITask } from "../tasks/task.js";
+import { MongooseTask } from "../tasks/repo/tasks.mongoose.js";
 
 type UpcomingMeeting = Pick<IMeeting, "id" | "title" | "date"> & {
   participantCount: number;
@@ -21,35 +22,81 @@ type DashboardData = {
   overdueTasks: OverdueTask[];
 };
 
-export async function getDashboardDataByUserId(
-  userId: string
-): Promise<DashboardData> {
-  const now = new Date();
-
-  const upcomingMeetings = await MongooseMeeting.aggregate([
-    { $match: { userId, date: { $gte: now } } },
+const getUpcomingMeetings = async (
+  userId: string,
+  referenceDate: Date
+): Promise<UpcomingMeeting[]> => {
+  const aggregation = await MongooseMeeting.aggregate([
+    { $match: { userId, date: { $gte: referenceDate } } },
     { $sort: { date: 1 } },
     { $limit: 5 },
     { $addFields: { participantCount: { $size: "$participants" } } },
     { $project: { _id: 1, title: 1, date: 1, participantCount: 1 } },
   ]);
 
-  const totalMeetings = await MongooseMeeting.countDocuments({ userId });
-
-  const dashboardData: DashboardData = {
-    totalMeetings,
-    taskSummary: {
-      pending: 0,
-      inProgress: 0,
-      completed: 0,
-    },
-    upcomingMeetings: upcomingMeetings.map((meeting) => ({
+  return aggregation.map(
+    (meeting): UpcomingMeeting => ({
       id: meeting._id as string,
       title: meeting.title,
       date: meeting.date,
       participantCount: meeting.participantCount,
-    })),
-    overdueTasks: [],
+    })
+  );
+};
+
+const getTaskSummary = async (
+  userId: string
+): Promise<DashboardData["taskSummary"]> => {
+  const taskSummaryAggregation: {
+    _id: string;
+    count: number;
+  }[] = await MongooseTask.aggregate([
+    { $match: { userId } },
+    { $group: { _id: "$status", count: { $sum: 1 } } },
+  ]);
+
+  const taskSummaryRecord = taskSummaryAggregation.reduce((acc, curr) => {
+    acc[curr._id.toString()] = curr.count;
+    return acc;
+  }, {} as Record<string, number>);
+
+  return {
+    pending: taskSummaryRecord["pending"] ?? 0,
+    inProgress: taskSummaryRecord["in-progress"] ?? 0,
+    completed: taskSummaryRecord["completed"] ?? 0,
+  };
+};
+
+const getOverdueTasks = async (
+  userId: string,
+  referenceDate: Date
+): Promise<OverdueTask[]> => {
+  const aggregation = await MongooseTask.aggregate([
+    {
+      $match: {
+        userId,
+        dueDate: { $lt: referenceDate },
+        status: { $ne: "completed" },
+      },
+    },
+  ]);
+
+  console.warn(JSON.stringify(aggregation, null, 2));
+  return [];
+};
+
+export async function getDashboardDataByUserId(
+  userId: string
+): Promise<DashboardData> {
+  const now = new Date();
+
+  const totalMeetings = await MongooseMeeting.countDocuments({ userId });
+
+  const dashboardData: DashboardData = {
+    totalMeetings,
+    taskSummary: await getTaskSummary(userId),
+    upcomingMeetings: await getUpcomingMeetings(userId, now),
+    overdueTasks: await getOverdueTasks(userId, now),
   };
 
   return dashboardData;
