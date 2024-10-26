@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import useUserStore from "./useUser";
 
 const API_URL = "http://localhost:3000";
@@ -22,32 +22,46 @@ export const useGetAuthenticated = <T = any[]>(
   return { data, isLoading };
 };
 
-export const usePostAuthenticated = <T = any, R = any>(path: string) => {
+export const usePostAuthenticated = <T = any, R = any>(
+  path: string,
+  { invalidateKey }: { invalidateKey: string }
+) => {
   const { userId } = useUserStore();
-
-  return useMutation<R, Error, T>((data) =>
-    fetch(`${API_URL}${path}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-user-id": userId,
-      },
-      body: JSON.stringify(data),
-    }).then((res) => res.json())
-  );
+  const queryClient = useQueryClient();
+  return useMutation<R, Error, T>({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [invalidateKey, userId] });
+    },
+    mutationFn: (data) =>
+      fetch(`${API_URL}${path}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json()),
+  });
 };
 
-export const usePutAuthenticated = <T = any, R = any>(path: string) => {
+export const usePutAuthenticated = <T = any, R = any>(
+  path: string,
+  { invalidateKey }: { invalidateKey: string }
+) => {
   const { userId } = useUserStore();
-
-  return useMutation<R, Error, T>((data) =>
-    fetch(`${API_URL}${path}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-user-id": userId,
-      },
-      body: JSON.stringify(data),
-    }).then((res) => res.json())
-  );
+  const queryClient = useQueryClient();
+  return useMutation<R, Error, T>({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [invalidateKey, userId] });
+    },
+    mutationFn: (data) =>
+      fetch(`${API_URL}${path}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json()),
+  });
 };

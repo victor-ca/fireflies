@@ -11,6 +11,7 @@ Open questions:
 
 Did not do:
 
+- front optimizations (eg. useMemo on dashboard when grouping)
 - touch the auth (which can barely be called auth), also saving it to the insecure local store.
 - leverage .env for frontend and backend urls
 - error and loading states on frontend

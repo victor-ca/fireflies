@@ -1,13 +1,19 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetAuthenticated } from "../../../utils/http";
+import { useGetAuthenticated, usePutAuthenticated } from "../../../utils/http";
 import "./SingleMeetingPage.scss";
 import TaskList from "../../tasks/TaskList";
 import { IMeetingWithTasks } from "../../../model/meeting.model";
+import Transcript from "./transcript/Transcript";
 
 const SingleMeetingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useGetAuthenticated<IMeetingWithTasks>(
+  const { mutate: updateTranscript } = usePutAuthenticated(
+    `/api/meetings/${id}/transcript`,
+    { invalidateKey: `meeting-${id}` }
+  );
+
+  const { data: meeting, isLoading } = useGetAuthenticated<IMeetingWithTasks>(
     `/api/meetings/${id}`,
     {
       cacheKey: `meeting-${id}`,
@@ -18,12 +24,16 @@ const SingleMeetingPage: React.FC = () => {
     return <p>Loading meeting...</p>;
   }
 
-  if (!data) {
+  if (!meeting) {
     return <p>Meeting not found.</p>;
   }
 
   const { title, date, participants, summary, actionItems, transcript, tasks } =
-    data;
+    meeting;
+
+  const handleTranscriptChange = (transcript: string) => {
+    updateTranscript({ transcript });
+  };
 
   return (
     <div id="single-meeting">
@@ -46,8 +56,10 @@ const SingleMeetingPage: React.FC = () => {
       </section>
 
       <section>
-        <h2>Transcript</h2>
-        <pre>{transcript}</pre>
+        <Transcript
+          transcript={transcript}
+          onTranscriptChange={handleTranscriptChange}
+        />
       </section>
 
       <TaskList tasks={tasks} />

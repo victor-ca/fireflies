@@ -13,7 +13,7 @@ const NewMeeting: React.FC = () => {
     title: string;
     date: string;
     participants: string[];
-  }>("/api/meetings");
+  }>("/api/meetings", { invalidateKey: "meetings" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
