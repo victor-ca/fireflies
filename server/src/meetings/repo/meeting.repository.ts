@@ -1,9 +1,23 @@
 import { Meeting } from "./meeting.mongoose";
-import { IMeeting } from "../meeting.model";
+import {
+  IMeeting,
+  IMeetingCreateRequest,
+  IMeetingWithId,
+} from "../meeting.model";
 
 export class MongooseMeetingRepository {
   async findAll(userId: string): Promise<IMeeting[]> {
-    return Meeting.find({ userId });
+    const result = await Meeting.find({ userId })
+      .select({
+        userId: 1,
+        title: 1,
+        date: 1,
+        participants: 1,
+        _id: 1,
+      })
+
+      .lean();
+    return result.map(this.toMeeting);
   }
 
   async findById(id: string): Promise<IMeeting | null> {
@@ -54,4 +68,14 @@ export class MongooseMeetingRepository {
       ],
     };
   }
+
+  private readonly toMeeting = (
+    meeting: IMeeting & { _id: unknown }
+  ): IMeetingWithId => {
+    return {
+      // we should trim extra props here.
+      ...meeting,
+      id: meeting._id as string,
+    };
+  };
 }

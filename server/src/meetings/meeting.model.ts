@@ -9,13 +9,18 @@ export interface IMeeting {
   summary: string;
   actionItems: string[];
 }
+export interface IMeetingWithId extends IMeeting {
+  id: string;
+}
 
 const meetingCreationFields = [
   "title",
   "date",
   "participants",
 ] as const satisfies (keyof IMeeting)[];
+
 type MeetingCreationFields = (typeof meetingCreationFields)[number];
+export type IMeetingCreateRequest = Pick<IMeeting, MeetingCreationFields>;
 
 type KeyGuard = MeetingCreationFields | `${MeetingCreationFields}.*`;
 export const validateMeetingCreation = validate([
