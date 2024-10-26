@@ -8,6 +8,7 @@ Did:
 Open questions:
 
 - `GET /api/meetings/:id` - its not specified to retrieve own or all tasks - now only takes owned.
+- `POST /api/meetings/:id/summarize` - not clear who's invoking it. assumed not the user - so not secured.
 
 Did not do:
 

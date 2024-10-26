@@ -34,4 +34,12 @@ export class MongooseTaskRepository {
       dueDate: task.dueDate,
     };
   }
+  async create(task: Omit<ITask, "id">): Promise<ITask> {
+    const newTask = new MongooseTask({
+      ...task,
+      meetingId: new mongoose.Types.ObjectId(task.meetingId),
+    });
+    const savedTask = await newTask.save();
+    return this.convertToITask(savedTask);
+  }
 }

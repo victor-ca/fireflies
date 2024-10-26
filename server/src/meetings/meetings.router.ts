@@ -3,7 +3,10 @@ import express from "express";
 import { AuthenticatedRequest } from "../auth/auth.middleware.js";
 
 import { validateMeetingCreation } from "./meeting.model.js";
-import { useSecureMeetingService } from "../service.setup.js";
+import {
+  useMeetingSummarizer,
+  useSecureMeetingService,
+} from "../service.setup.js";
 
 export const router = express.Router();
 
@@ -32,24 +35,19 @@ router.get("/:id", async (req: AuthenticatedRequest, res) => {
 });
 
 router.put("/:id/transcript", async (req: AuthenticatedRequest, res) => {
-  try {
-    const { transcript } = req.body;
-    if (!transcript || typeof transcript !== "string") {
-      res.status(400).json({ message: "Invalid transcript data" });
-      return;
-    }
-
-    const meetingService = useSecureMeetingService(req.userId);
-    const updatedMeeting = await meetingService.updateTranscript({
-      meetingId: req.params.id,
-      transcript,
-    });
-
-    res.json(updatedMeeting);
-  } catch (error) {
-    console.error("Error updating transcript:", error);
-    res.status(500).json({ message: "Internal server error" });
+  const { transcript } = req.body;
+  if (!transcript || typeof transcript !== "string") {
+    res.status(400).json({ message: "Invalid transcript data" });
+    return;
   }
+
+  const meetingService = useSecureMeetingService(req.userId);
+  const updatedMeeting = await meetingService.updateTranscript({
+    meetingId: req.params.id,
+    transcript,
+  });
+
+  res.json(updatedMeeting);
 });
 
 router.post(
@@ -62,6 +60,11 @@ router.post(
     res.status(201).json(newMeeting);
   }
 );
+
+router.post("/:id/summarize", async (req: AuthenticatedRequest, res) => {
+  await useMeetingSummarizer().summarizeMeeting(req.params.id);
+  res.status(201).json({ message: "Meeting summarized" });
+});
 
 router.get("/stats", async (req: AuthenticatedRequest, res) => {
   const stats = await useSecureMeetingService(req.userId).getStats();

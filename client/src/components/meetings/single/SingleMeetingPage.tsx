@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetAuthenticated, usePutAuthenticated } from "../../../utils/http";
+import {
+  useGetAuthenticated,
+  usePostAuthenticated,
+  usePutAuthenticated,
+} from "../../../utils/http";
 import "./SingleMeetingPage.scss";
 import TaskList from "../../tasks/TaskList";
 import { IMeetingWithTasks } from "../../../model/meeting.model";
@@ -10,6 +14,11 @@ const SingleMeetingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { mutate: updateTranscript } = usePutAuthenticated(
     `/api/meetings/${id}/transcript`,
+    { invalidateKey: `meeting-${id}` }
+  );
+
+  const { mutate: aiSummarize } = usePostAuthenticated(
+    `/api/meetings/${id}/summarize`,
     { invalidateKey: `meeting-${id}` }
   );
 
@@ -38,6 +47,13 @@ const SingleMeetingPage: React.FC = () => {
   return (
     <div id="single-meeting">
       <h1>{title}</h1>
+      <button
+        onClick={() => {
+          aiSummarize(undefined);
+        }}
+      >
+        AI Summarize
+      </button>
       <p>Date: {new Date(date).toLocaleString()}</p>
       <p>Participants: {participants.join(", ")}</p>
 
