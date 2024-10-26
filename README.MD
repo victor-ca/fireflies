@@ -36,6 +36,7 @@ it will automatically build the image and run in docker composer with the backen
 
   - `npm run dev` to start the server standalone
   - `npm run seed` to seed the database with some data
+  - `npm run test` to run the tests
 
 - `client/`: contains the frontend code
 

@@ -16,7 +16,7 @@ export class SecureMeetingService {
     return this.meetingRepository.findAll({ userId });
   }
 
-  async findById(meetingId: string): Promise<
+  async findByMeetingId(meetingId: string): Promise<
     | (IMeeting & {
         tasks: ITask[];
       })

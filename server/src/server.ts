@@ -5,7 +5,7 @@ import cors from "cors";
 import { dashboardRoutes } from "./dashboard/dashboard.router.js";
 import { authMiddleware } from "./auth/auth.middleware.js";
 import { meetingRoutes } from "./meetings/meetings.router.js";
-import { UnauthorizedError } from "./auth/errors.js";
+import { NotFoundError, UnauthorizedError } from "./auth/errors.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -20,6 +20,18 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the MeetingBot API" });
+});
+
+app.get("/die/any", (req, res) => {
+  throw new Error("This is a test error");
+});
+
+app.get("/die/auth", (req, res) => {
+  throw new UnauthorizedError("auth error");
+});
+
+app.get("/die/404", (req, res) => {
+  throw new NotFoundError("somthing missing");
 });
 
 app.use("/api/meetings", authMiddleware, meetingRoutes);
@@ -49,3 +61,5 @@ app.use(
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+export { app };

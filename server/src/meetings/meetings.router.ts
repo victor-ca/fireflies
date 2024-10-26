@@ -32,7 +32,7 @@ router.get("/stats", async (req: AuthenticatedRequest, res) => {
 });
 
 router.get("/:id", async (req: AuthenticatedRequest, res) => {
-  const meeting = await useSecureMeetingService(req.userId).findById(
+  const meeting = await useSecureMeetingService(req.userId).findByMeetingId(
     req.params.id
   );
   if (!meeting) {
