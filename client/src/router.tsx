@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MeetingList from "./components/meetings/list/MeetingList.tsx";
 import NewMeeting from "./components/meetings/new/NewMeeting.tsx";
 import SingleMeeting from "./components/meetings/single/SingleMeeting.tsx";
+import TaskListPage from "./components/tasks/TaskListPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/meetings/:id",
         element: <SingleMeeting />,
+      },
+      {
+        path: "/tasks",
+        element: <TaskListPage />,
       },
     ],
   },

@@ -42,6 +42,9 @@ function Root() {
               <li>
                 <a href={`/meetings`}>Meetings</a>
               </li>
+              <li>
+                <a href={`/tasks`}>Tasks</a>
+              </li>
             </ul>
           </nav>
         )}
