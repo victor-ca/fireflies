@@ -5,13 +5,14 @@ import cors from "cors";
 import { dashboardRoutes } from "./dashboard/dashboard.router.js";
 import { authMiddleware } from "./auth/auth.middleware.js";
 import { meetingRoutes } from "./meetings/meetings.router.js";
+import { UnauthorizedError } from "./auth/errors.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 await mongoose
   .connect("mongodb://localhost:27017/meetingbot")
-  .then((conn) => console.log("Connected to MongoDB"))
+  .then((_conn) => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use(cors());
@@ -24,6 +25,26 @@ app.get("/", (req, res) => {
 app.use("/api/meetings", authMiddleware, meetingRoutes);
 app.use("/api/tasks", authMiddleware, taskRoutes);
 app.use("/api/dashboard", authMiddleware, dashboardRoutes);
+
+app.use(
+  (
+    err: Error,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err.stack);
+
+    if (err instanceof UnauthorizedError) {
+      res.status(401).json({ message: err.message });
+      return;
+    }
+
+    res
+      .status(500)
+      .json({ message: "An unexpected error occurred", error: err.message });
+  }
+);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

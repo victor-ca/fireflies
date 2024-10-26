@@ -5,7 +5,7 @@ import { Meeting } from "./meetings/repo/meeting.mongoose.js";
 
 const MONGODB_URI = "mongodb://localhost:27017/meetingbot";
 
-const MAX_MEETINGS = 0;
+const MAX_MEETINGS = 100;
 
 await mongoose
   .connect(MONGODB_URI)

@@ -1,12 +1,8 @@
 import { Meeting } from "./meeting.mongoose";
-import {
-  IMeeting,
-  IMeetingCreateRequest,
-  IMeetingWithId,
-} from "../meeting.model";
+import { IMeeting, IMeetingWithId } from "../meeting.model";
 
 export class MongooseMeetingRepository {
-  async findAll(userId: string): Promise<IMeeting[]> {
+  async findAll({ userId }: { userId: string }): Promise<IMeeting[]> {
     const result = await Meeting.find({ userId })
       .select({
         userId: 1,
@@ -20,8 +16,26 @@ export class MongooseMeetingRepository {
     return result.map(this.toMeeting);
   }
 
+  async getUserIdByMeetingId(meetingId: string): Promise<string | null> {
+    const result = await Meeting.findById(meetingId).select({
+      userId: 1,
+    });
+    return result?.userId ?? null;
+  }
+
+  async updateTranscript({
+    meetingId,
+    transcript,
+  }: {
+    meetingId: string;
+    transcript: string;
+  }): Promise<IMeeting | null> {
+    return Meeting.findByIdAndUpdate(meetingId, { transcript }, { new: true });
+  }
+
   async findById(id: string): Promise<IMeeting | null> {
-    return Meeting.findById(id);
+    const result = await Meeting.findById(id).lean();
+    return result ? this.toMeeting(result) : null;
   }
 
   async create(meeting: IMeeting): Promise<IMeeting> {

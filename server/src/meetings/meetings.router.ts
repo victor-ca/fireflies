@@ -1,13 +1,11 @@
 import express from "express";
 
 import { AuthenticatedRequest } from "../auth/auth.middleware.js";
-import { MongooseMeetingRepository } from "./repo/meeting.repository.js";
 
 import { validateMeetingCreation } from "./meeting.model.js";
 import { useSecureMeetingService } from "./repo/service-builder.js";
 
 export const router = express.Router();
-const meetingRepository = new MongooseMeetingRepository();
 
 router.get("/", async (req: AuthenticatedRequest, res) => {
   const meetings = await useSecureMeetingService(
@@ -20,6 +18,38 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
     page: req.query.page,
     data: meetings,
   });
+});
+
+router.get("/:id", async (req: AuthenticatedRequest, res) => {
+  const meeting = await useSecureMeetingService(req.userId).findById(
+    req.params.id
+  );
+  if (!meeting) {
+    res.status(404).json({ message: "Meeting not found" });
+    return;
+  }
+  res.json(meeting);
+});
+
+router.put("/:id/transcript", async (req: AuthenticatedRequest, res) => {
+  try {
+    const { transcript } = req.body;
+    if (!transcript || typeof transcript !== "string") {
+      res.status(400).json({ message: "Invalid transcript data" });
+      return;
+    }
+
+    const meetingService = useSecureMeetingService(req.userId);
+    const updatedMeeting = await meetingService.updateTranscript({
+      meetingId: req.params.id,
+      transcript,
+    });
+
+    res.json(updatedMeeting);
+  } catch (error) {
+    console.error("Error updating transcript:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.post(
