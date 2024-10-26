@@ -10,9 +10,17 @@ import { NotFoundError, UnauthorizedError } from "./auth/errors.js";
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.warn("MONGODB_URI is not set");
+  console.warn("using default: mongodb://localhost:27017/meetingbot");
+}
+
 await mongoose
-  .connect("mongodb://localhost:27017/meetingbot")
-  .then((_conn) => console.log("Connected to MongoDB"))
+  .connect(MONGODB_URI ?? "mongodb://localhost:27017/meetingbot")
+  .then((_conn) =>
+    console.log(`Connected to MongoDB: ${_conn.connection.db?.databaseName}`)
+  )
   .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use(cors());
