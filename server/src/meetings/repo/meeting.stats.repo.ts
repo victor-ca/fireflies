@@ -41,11 +41,18 @@ export class MeetingStatsRepository {
           _id: 0,
           totalMeetings: 1,
           totalParticipants: 1,
+          averageParticipants: {
+            $divide: ["$totalParticipants", "$totalMeetings"],
+          },
         },
       },
     ]).exec();
 
-    const stats = generalStats[0] || { totalMeetings: 0, totalParticipants: 0 };
+    const stats = generalStats[0] || {
+      totalMeetings: 0,
+      totalParticipants: 0,
+      averageParticipants: 0,
+    };
 
     return {
       generalStats: stats,
