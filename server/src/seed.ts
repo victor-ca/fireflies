@@ -6,7 +6,7 @@ import { IMongooseTask, MongooseTask } from "./tasks/repo/tasks.mongoose.js";
 
 const MONGODB_URI = "mongodb://localhost:27017/meetingbot";
 
-const MAX_MEETINGS = 0;
+const MAX_MEETINGS = 10000;
 
 await mongoose
   .connect(MONGODB_URI)

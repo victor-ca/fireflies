@@ -48,6 +48,22 @@ export class MeetingStatsRepository {
       },
     ]).exec();
 
+    const topParticipantsAggregate = await MongooseMeeting.aggregate([
+      { $match: { userId: userId } },
+      { $unwind: "$participants" },
+      { $group: { _id: "$participants", meetingCount: { $sum: 1 } } },
+      { $sort: { meetingCount: -1 } },
+      { $limit: 5 },
+      { $project: { participant: "$_id", meetingCount: 1, _id: 0 } },
+    ]).exec();
+
+    const meetingsByDayOfWeek = await MongooseMeeting.aggregate([
+      { $match: { userId: userId } },
+      { $group: { _id: { $dayOfWeek: "$date" }, count: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+      { $project: { dayOfWeek: "$_id", count: 1, _id: 0 } },
+    ]).exec();
+
     const stats = generalStats[0] || {
       totalMeetings: 0,
       totalParticipants: 0,
@@ -56,6 +72,8 @@ export class MeetingStatsRepository {
 
     return {
       generalStats: stats,
+      topParticipants: topParticipantsAggregate,
+      meetingsByDayOfWeek,
     };
   }
 }

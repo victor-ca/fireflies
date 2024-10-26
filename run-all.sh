@@ -6,7 +6,7 @@ run_backend() {
     cd server
     npm install
     npm run start:database
-    npm start &
+    npm run dev &
     backend_pid=$!
     cd ..
 }
