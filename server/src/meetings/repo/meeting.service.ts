@@ -1,26 +1,39 @@
-import { NotFoundError, UnauthorizedError } from "../../auth/errors";
+import { MeetingAccessService } from "../../auth/meeting-access.service";
+import { MongooseTaskRepository } from "../../tasks/repo/tasks.repo";
+import { ITask } from "../../tasks/task";
 import { IMeeting, IMeetingCreateRequest } from "../meeting.model";
 import { MongooseMeetingRepository } from "./meeting.repository";
 
 export class SecureMeetingService {
   constructor(
-    private readonly repository: MongooseMeetingRepository,
-    private readonly userId: string
+    private readonly meetingRepository: MongooseMeetingRepository,
+    private readonly taskRepository: MongooseTaskRepository,
+    private readonly accessService: MeetingAccessService
   ) {}
 
-  async findAllForCurrentUser(): Promise<IMeeting[]> {
-    return this.repository.findAll({ userId: this.userId });
+  async findByUserId(userId: string): Promise<IMeeting[]> {
+    await this.accessService.assertUserAccess(userId);
+    return this.meetingRepository.findAll({ userId });
   }
 
-  async findById(meetingId: string): Promise<IMeeting | null> {
-    await this.assertCurrentUserCanAccessMeeting(meetingId);
-    const meeting = await this.repository.findById(meetingId);
-    if (meeting && meeting.userId !== this.userId) {
-      throw new UnauthorizedError(
-        "You are not authorized to access this meeting"
-      );
+  async findById(meetingId: string): Promise<
+    | (IMeeting & {
+        tasks: ITask[];
+      })
+    | null
+  > {
+    await this.accessService.assertMeetingAccess(meetingId);
+    const meeting = await this.meetingRepository.findById(meetingId);
+    if (!meeting) {
+      return null;
     }
-    return meeting;
+
+    const tasks = await this.taskRepository.findAllForMeeting({
+      meetingId,
+      userId: this.accessService.getCurrentUserId(),
+    });
+
+    return { ...meeting, tasks };
   }
 
   async updateTranscript({
@@ -30,14 +43,14 @@ export class SecureMeetingService {
     meetingId: string;
     transcript: string;
   }): Promise<IMeeting | null> {
-    await this.assertCurrentUserCanAccessMeeting(meetingId);
-    return this.repository.updateTranscript({ meetingId, transcript });
+    await this.accessService.assertMeetingAccess(meetingId);
+    return this.meetingRepository.updateTranscript({ meetingId, transcript });
   }
 
   async create(meetingData: IMeetingCreateRequest): Promise<IMeeting> {
-    return this.repository.create({
+    return this.meetingRepository.create({
       ...meetingData,
-      userId: this.userId,
+      userId: this.accessService.getCurrentUserId(),
       actionItems: [],
       transcript: "",
       summary: "",
@@ -45,20 +58,8 @@ export class SecureMeetingService {
   }
 
   async getStats() {
-    return this.repository.getStats(this.userId);
-  }
+    const userId = this.accessService.getCurrentUserId();
 
-  private readonly assertCurrentUserCanAccessMeeting = async (
-    meetingId: string
-  ) => {
-    const meetingUserId = await this.repository.getUserIdByMeetingId(meetingId);
-    if (!meetingUserId) {
-      throw new NotFoundError("Meeting not found");
-    }
-    if (meetingUserId !== this.userId) {
-      throw new UnauthorizedError(
-        "You are not authorized to access this meeting"
-      );
-    }
-  };
+    return this.meetingRepository.getStats(userId);
+  }
 }

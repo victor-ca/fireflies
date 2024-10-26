@@ -3,14 +3,14 @@ import express from "express";
 import { AuthenticatedRequest } from "../auth/auth.middleware.js";
 
 import { validateMeetingCreation } from "./meeting.model.js";
-import { useSecureMeetingService } from "./repo/service-builder.js";
+import { useSecureMeetingService } from "../service.setup.js";
 
 export const router = express.Router();
 
 router.get("/", async (req: AuthenticatedRequest, res) => {
-  const meetings = await useSecureMeetingService(
-    req.userId
-  ).findAllForCurrentUser();
+  const meetings = await useSecureMeetingService(req.userId).findByUserId(
+    req.userId!
+  );
 
   res.json({
     total: meetings.length,

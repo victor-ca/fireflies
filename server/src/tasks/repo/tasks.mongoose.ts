@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { ITask } from "../task";
 
-export type IMongooseTask = Omit<ITask, "meetingId"> & {
+export type IMongooseTask = Omit<ITask, "meetingId" | "id"> & {
   meetingId: mongoose.Types.ObjectId;
 } & Document;
 

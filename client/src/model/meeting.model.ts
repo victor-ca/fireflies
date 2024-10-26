@@ -1,3 +1,5 @@
+import { ITask } from "./task.model";
+
 export interface IMeeting {
   id: string;
   userId: string;
@@ -7,4 +9,8 @@ export interface IMeeting {
   transcript: string;
   summary: string;
   actionItems: string[];
+}
+
+export interface IMeetingWithTasks extends IMeeting {
+  tasks: ITask[];
 }

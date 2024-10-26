@@ -8,7 +8,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <h1>Not found</h1>,
+    errorElement: <h1 style={{ textAlign: "center", padding: "2rem" }}>:(</h1>,
     children: [
       {
         path: "/meetings",

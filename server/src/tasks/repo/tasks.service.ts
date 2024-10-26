@@ -1,29 +1,31 @@
-import { UnauthorizedError } from "../../auth/errors";
+import { MeetingAccessService } from "../../auth/meeting-access.service";
 import { ITask } from "../task";
-import { TaskRepo } from "./tasks.repo";
+import { MongooseTaskRepository } from "./tasks.repo";
 
 export class SecureTaskService {
   constructor(
-    private readonly repository: TaskRepo,
-    private readonly userId: string
+    private readonly repository: MongooseTaskRepository,
+    private readonly accessService: MeetingAccessService
   ) {}
 
-  async findAllForCurrentUser(): Promise<ITask[]> {
-    return this.repository.findAll(this.userId);
+  async findByUserId(userId: string): Promise<ITask[]> {
+    await this.accessService.assertUserAccess(userId);
+    return this.repository.findAllByUserId(userId);
   }
 
-  async findAllForMeeting(meetingId: string): Promise<ITask[]> {
-    const tasks = await this.repository.findAllForMeeting(meetingId);
+  async findAllForMeeting({
+    meetingId,
+    userId,
+  }: {
+    meetingId: string;
+    userId: string;
+  }): Promise<ITask[]> {
+    await this.accessService.assertMeetingAccess(meetingId);
+    const tasks = await this.repository.findAllForMeeting({
+      meetingId,
+      userId,
+    });
 
-    // Check if any of the tasks belong to the current user
-    const userTasks = tasks.filter((task) => task.userId === this.userId);
-
-    if (userTasks.length === 0) {
-      throw new UnauthorizedError(
-        "You are not authorized to access tasks for this meeting"
-      );
-    }
-
-    return userTasks;
+    return tasks;
   }
 }

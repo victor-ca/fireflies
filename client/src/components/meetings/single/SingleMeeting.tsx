@@ -1,12 +1,13 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetAuthenticated } from "../../../utils/http";
-import { IMeeting } from "../../../model/meeting.model";
 import "./SingleMeeting.scss";
+import TaskList from "../../tasks/TaskList";
+import { IMeetingWithTasks } from "../../../model/meeting.model";
 
 const SingleMeeting: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useGetAuthenticated<IMeeting>(
+  const { data, isLoading } = useGetAuthenticated<IMeetingWithTasks>(
     `/api/meetings/${id}`,
     {
       cacheKey: `meeting-${id}`,
@@ -21,7 +22,8 @@ const SingleMeeting: React.FC = () => {
     return <p>Meeting not found.</p>;
   }
 
-  const { title, date, participants, summary, actionItems, transcript } = data;
+  const { title, date, participants, summary, actionItems, transcript, tasks } =
+    data;
 
   return (
     <div id="single-meeting">
@@ -47,6 +49,8 @@ const SingleMeeting: React.FC = () => {
         <h2>Transcript</h2>
         <pre>{transcript}</pre>
       </section>
+
+      <TaskList tasks={tasks} />
     </div>
   );
 };
