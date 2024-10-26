@@ -18,3 +18,4 @@ Did not do:
 - leverage .env for frontend and backend urls
 - error and loading states on frontend
 - proper styling (relied on id's for styling, no component library)
+- serve the frontend as standalone (or as static files from backend) in the docker test
