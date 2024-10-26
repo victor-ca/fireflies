@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose, { Types } from "mongoose";
 import { AuthenticatedRequest } from "../auth/auth.middleware.js";
-import { Meeting } from "../meetings/meeting.model.js";
+import { Meeting } from "../meetings/repo/meeting.mongoose.js";
 
 interface UpcomingMeeting {
   _id: Types.ObjectId;

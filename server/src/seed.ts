@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { Meeting, IMeeting } from "./meetings/meeting.model.js";
+import { IMeeting } from "./meetings/meeting.model.js";
 import { Task, ITask } from "./tasks/task.js";
+import { Meeting } from "./meetings/repo/meeting.mongoose.js";
 
 const MONGODB_URI = "mongodb://localhost:27017/meetingbot";
 

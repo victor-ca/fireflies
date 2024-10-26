@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { taskRoutes } from "./tasks/task.router.js";
+import cors from "cors";
 import { dashboardRoutes } from "./dashboard/dashboard.router.js";
 import { authMiddleware } from "./auth/auth.middleware.js";
 import { meetingRoutes } from "./meetings/meetings.router.js";
@@ -13,6 +14,7 @@ await mongoose
   .then((conn) => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
