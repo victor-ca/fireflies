@@ -1,11 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetAuthenticated } from "../../../utils/http";
-import "./SingleMeeting.scss";
+import "./SingleMeetingPage.scss";
 import TaskList from "../../tasks/TaskList";
 import { IMeetingWithTasks } from "../../../model/meeting.model";
 
-const SingleMeeting: React.FC = () => {
+const SingleMeetingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetAuthenticated<IMeetingWithTasks>(
     `/api/meetings/${id}`,
@@ -55,4 +55,4 @@ const SingleMeeting: React.FC = () => {
   );
 };
 
-export default SingleMeeting;
+export default SingleMeetingPage;

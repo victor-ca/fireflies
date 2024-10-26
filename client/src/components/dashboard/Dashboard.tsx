@@ -14,6 +14,14 @@ const Dashboard: React.FC = () => {
     return <p>Loading dashboard...</p>;
   }
 
+  const groupedOverdueTasks = dashboardData.overdueTasks.reduce((acc, task) => {
+    if (!acc[task.meetingId]) {
+      acc[task.meetingId] = [];
+    }
+    acc[task.meetingId].push(task);
+    return acc;
+  }, {} as Record<string, typeof dashboardData.overdueTasks>);
+
   return (
     <div className="dashboard">
       <h1>Dashboard</h1>
@@ -41,14 +49,21 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="overdue-tasks">
         <h2>Overdue Tasks</h2>
-        <ul>
-          {dashboardData.overdueTasks.map((task) => (
-            <li key={task.id}>
-              {task.title} - Due: {new Date(task.dueDate).toLocaleString()} -
-              Meeting: {task.meetingTitle}
-            </li>
-          ))}
-        </ul>
+        {Object.entries(groupedOverdueTasks).map(([meetingId, tasks]) => (
+          <div key={meetingId}>
+            <h3>{tasks[0].meetingTitle}</h3>
+            <ul>
+              {tasks.map((task) => (
+                <li key={task.id}>
+                  {task.title} - Due:{" "}
+                  {formatDistanceToNow(new Date(task.dueDate), {
+                    addSuffix: true,
+                  })}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

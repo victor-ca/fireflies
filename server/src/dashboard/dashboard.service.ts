@@ -79,10 +79,35 @@ const getOverdueTasks = async (
         status: { $ne: "completed" },
       },
     },
+    {
+      $lookup: {
+        from: "meetings",
+        localField: "meetingId",
+        foreignField: "_id",
+        as: "meeting",
+      },
+    },
+    { $unwind: "$meeting" },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        dueDate: 1,
+        meetingId: 1,
+        meetingTitle: "$meeting.title",
+      },
+    },
   ]);
 
-  console.warn(JSON.stringify(aggregation, null, 2));
-  return [];
+  return aggregation.map(
+    (aggregate): OverdueTask => ({
+      id: aggregate._id as string,
+      title: aggregate.title,
+      dueDate: aggregate.dueDate,
+      meetingId: aggregate.meetingId,
+      meetingTitle: aggregate.title,
+    })
+  );
 };
 
 export async function getDashboardDataByUserId(
