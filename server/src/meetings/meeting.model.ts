@@ -1,6 +1,7 @@
 import { body } from "express-validator";
 import { validate } from "../utils/validation.js";
 export interface IMeeting {
+  id: string;
   userId: string;
   title: string;
   date: Date;

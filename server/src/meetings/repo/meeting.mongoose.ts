@@ -12,7 +12,7 @@ const meetingSchema = new Schema<MeetingDocument>({
   actionItems: [String],
 });
 
-export const Meeting = mongoose.model<MeetingDocument>(
+export const MongooseMeeting = mongoose.model<MeetingDocument>(
   "Meeting",
   meetingSchema
 );

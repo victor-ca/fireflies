@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
 import useUserStore from "./utils/useUser";
 import "./Root.scss";
@@ -34,16 +34,16 @@ function Root() {
           <nav>
             <ul>
               <li>
-                <a href={`/meetings/new`}>New Meeting</a>
+                <Link to="/meetings/new">New Meeting</Link>
               </li>
               <li>
-                <a href={`/dashboard`}>Dashboard</a>
+                <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
-                <a href={`/meetings`}>Meetings</a>
+                <Link to="/meetings">Meetings</Link>
               </li>
               <li>
-                <a href={`/tasks`}>Tasks</a>
+                <Link to="/tasks">Tasks</Link>
               </li>
             </ul>
           </nav>

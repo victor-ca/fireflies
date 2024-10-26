@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { IMeeting } from "./meetings/meeting.model.js";
-import { Task, ITask } from "./tasks/task.js";
-import { Meeting } from "./meetings/repo/meeting.mongoose.js";
+
+import { MongooseMeeting } from "./meetings/repo/meeting.mongoose.js";
+import { IMongooseTask, MongooseTask } from "./tasks/repo/tasks.mongoose.js";
 
 const MONGODB_URI = "mongodb://localhost:27017/meetingbot";
 
@@ -38,16 +39,17 @@ function randomParticipants(): string[] {
 }
 
 async function seedMeetings() {
-  await Meeting.deleteMany({});
+  await MongooseMeeting.deleteMany({});
 
   const meetings: IMeeting[] = [];
 
   for (let i = 0; i < MAX_MEETINGS; i++) {
     const userId = users[Math.floor(Math.random() * users.length)];
-    const meeting = new Meeting({
+    const dateInTheFuture = randomDate(new Date(), new Date(2025, 0, 1));
+    const meeting = new MongooseMeeting({
       userId: userId,
       title: `Meeting ${i + 1}`,
-      date: randomDate(new Date(2023, 0, 1), new Date()),
+      date: randomDate(new Date(2023, 0, 1), dateInTheFuture),
       participants: randomParticipants(),
       transcript: `This is a sample transcript for meeting ${i + 1}.`,
       summary: `Summary of meeting ${i + 1}`,
@@ -59,20 +61,20 @@ async function seedMeetings() {
     meetings.push(meeting);
   }
 
-  await Meeting.insertMany(meetings);
+  await MongooseMeeting.insertMany(meetings);
   console.log("Meetings seeded successfully");
 }
 
 async function seedTasks() {
-  await Task.deleteMany({});
+  await MongooseTask.deleteMany({});
 
-  const meetings = await Meeting.find();
-  const tasks: ITask[] = [];
+  const meetings = await MongooseMeeting.find();
+  const tasks: IMongooseTask[] = [];
 
   for (const meeting of meetings) {
     const taskCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 tasks per meeting
     for (let i = 0; i < taskCount; i++) {
-      const task = new Task({
+      const task = new MongooseTask({
         meetingId: meeting._id,
         userId: meeting.userId,
         title: `Task ${i + 1} from ${meeting.title}`,
@@ -88,7 +90,7 @@ async function seedTasks() {
     }
   }
 
-  await Task.insertMany(tasks);
+  await MongooseTask.insertMany(tasks);
   console.log("Tasks seeded successfully");
 }
 

@@ -4,6 +4,7 @@ import MeetingList from "./components/meetings/list/MeetingList.tsx";
 import NewMeeting from "./components/meetings/new/NewMeeting.tsx";
 import SingleMeeting from "./components/meetings/single/SingleMeeting.tsx";
 import TaskListPage from "./components/tasks/TaskListPage.tsx";
+import Dashboard from "./components/dashboard/Dashboard.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ export const router = createBrowserRouter([
     element: <Root />,
     errorElement: <h1 style={{ textAlign: "center", padding: "2rem" }}>:(</h1>,
     children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
       {
         path: "/meetings",
         element: <MeetingList />,
