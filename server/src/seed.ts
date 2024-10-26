@@ -5,6 +5,8 @@ import { Meeting } from "./meetings/repo/meeting.mongoose.js";
 
 const MONGODB_URI = "mongodb://localhost:27017/meetingbot";
 
+const MAX_MEETINGS = 0;
+
 await mongoose
   .connect(MONGODB_URI)
   .then(() => console.log("Connected to MongoDB for seeding"))
@@ -40,7 +42,7 @@ async function seedMeetings() {
 
   const meetings: IMeeting[] = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < MAX_MEETINGS; i++) {
     const userId = users[Math.floor(Math.random() * users.length)];
     const meeting = new Meeting({
       userId: userId,

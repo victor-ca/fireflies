@@ -1,8 +1,9 @@
-import { useQuery } from "react-query";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery, useMutation } from "react-query";
 import useUserStore from "./useUser";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useFetchAuthenticated = <T = any[]>(
+const API_URL = "http://localhost:3000";
+export const useGetAuthenticated = <T = any[]>(
   path: string,
   { cacheKey }: { cacheKey: string }
 ): { data: T | undefined; isLoading: true } | { data: T; isLoading: false } => {
@@ -11,7 +12,7 @@ export const useFetchAuthenticated = <T = any[]>(
   const { data, isLoading } = useQuery({
     queryKey: [cacheKey, userId],
     queryFn: () =>
-      fetch(`http://localhost:3000${path}`, {
+      fetch(`${API_URL}${path}`, {
         headers: {
           "x-user-id": userId,
         },
@@ -19,4 +20,34 @@ export const useFetchAuthenticated = <T = any[]>(
   });
 
   return { data, isLoading };
+};
+
+export const usePostAuthenticated = <T = any, R = any>(path: string) => {
+  const { userId } = useUserStore();
+
+  return useMutation<R, Error, T>((data) =>
+    fetch(`${API_URL}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": userId,
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json())
+  );
+};
+
+export const usePutAuthenticated = <T = any, R = any>(path: string) => {
+  const { userId } = useUserStore();
+
+  return useMutation<R, Error, T>((data) =>
+    fetch(`${API_URL}${path}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": userId,
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json())
+  );
 };

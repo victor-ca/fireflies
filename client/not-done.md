@@ -1,0 +1,2 @@
+- leverage .env for frontend and backend urls
+- error and loading states on frontend

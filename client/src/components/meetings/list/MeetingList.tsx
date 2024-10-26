@@ -1,10 +1,10 @@
 import React from "react";
-import { useFetchAuthenticated } from "../../../utils/http";
+import { useGetAuthenticated } from "../../../utils/http";
 import { IMeeting } from "../../../model/meeting.model";
 import "./MeetingList.scss";
 
 const MeetingList: React.FC = () => {
-  const { data, isLoading } = useFetchAuthenticated<{
+  const { data, isLoading } = useGetAuthenticated<{
     total: number;
     limit: number;
     page: number;

@@ -34,6 +34,9 @@ function Root() {
           <nav>
             <ul>
               <li>
+                <a href={`/meetings/new`}>New Meeting</a>
+              </li>
+              <li>
                 <a href={`/dashboard`}>Dashboard</a>
               </li>
               <li>
