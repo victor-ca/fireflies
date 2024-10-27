@@ -1,12 +1,12 @@
-import { MeetingAccessService } from "./auth/meeting-access.service";
-import { MockMeetingAiService } from "./meetings/services/ai-sumarizer/meeting-ai.service";
-import { MeetingSummarizerService } from "./meetings/services/ai-sumarizer/meeting-sumarizer.service";
-import { MongooseMeetingRepository } from "./meetings/repo/meeting.repository";
-import { SecureMeetingService } from "./meetings/services/meeting.service";
-import { MongooseTaskRepository } from "./tasks/repo/tasks.repo";
-import { SecureTaskService } from "./tasks/repo/tasks.service";
-import { SecureMeetingStatsService } from "./meetings/services/meeting-stats.service";
-import { MeetingStatsRepository } from "./meetings/repo/meeting.stats.repo";
+import { MeetingAccessService } from "./auth/meeting-access.service.js";
+import { MockMeetingAiService } from "./meetings/services/ai-sumarizer/meeting-ai.service.js";
+import { MeetingSummarizerService } from "./meetings/services/ai-sumarizer/meeting-sumarizer.service.js";
+import { MongooseMeetingRepository } from "./meetings/repo/meeting.repository.js";
+import { SecureMeetingService } from "./meetings/services/meeting.service.js";
+import { MongooseTaskRepository } from "./tasks/repo/tasks.repo.js";
+import { SecureTaskService } from "./tasks/repo/tasks.service.js";
+import { SecureMeetingStatsService } from "./meetings/services/meeting-stats.service.js";
+import { MeetingStatsRepository } from "./meetings/repo/meeting.stats.repo.js";
 
 const meetingRepository = new MongooseMeetingRepository();
 const taskRepository = new MongooseTaskRepository();

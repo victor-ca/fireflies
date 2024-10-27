@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IMeeting } from "../meeting.model";
+import { IMeeting } from "../meeting.model.js";
 
 type MeetingDocument = IMeeting & mongoose.Document;
 const meetingSchema = new Schema<MeetingDocument>({

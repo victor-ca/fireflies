@@ -1,8 +1,8 @@
-import { MeetingAccessService } from "../../auth/meeting-access.service";
-import { MongooseTaskRepository } from "../../tasks/repo/tasks.repo";
-import { ITask } from "../../tasks/task";
-import { IMeeting, IMeetingCreateRequest } from "../meeting.model";
-import { MongooseMeetingRepository } from "../repo/meeting.repository";
+import { MeetingAccessService } from "../../auth/meeting-access.service.js";
+import { MongooseTaskRepository } from "../../tasks/repo/tasks.repo.js";
+import { ITask } from "../../tasks/task.js";
+import { IMeeting, IMeetingCreateRequest } from "../meeting.model.js";
+import { MongooseMeetingRepository } from "../repo/meeting.repository.js";
 
 export class SecureMeetingService {
   constructor(

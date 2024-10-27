@@ -1,5 +1,5 @@
-import { IMeeting } from "../meetings/meeting.model";
-import { ITask } from "../tasks/task";
+import { IMeeting } from "../meetings/meeting.model.js";
+import { ITask } from "../tasks/task.js";
 
 export type UpcomingMeeting = Pick<IMeeting, "id" | "title" | "date"> & {
   participantCount: number;

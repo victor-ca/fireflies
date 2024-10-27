@@ -23,7 +23,7 @@
 //   { dayOfWeek: 7, count: 0 },
 // ],
 
-import { MongooseMeeting } from "./meeting.mongoose";
+import { MongooseMeeting } from "./meeting.mongoose.js";
 
 export class MeetingStatsRepository {
   async getStatsByUserId(userId: string): Promise<unknown> {

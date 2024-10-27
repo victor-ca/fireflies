@@ -1,5 +1,5 @@
-import { MongooseMeeting } from "./meeting.mongoose";
-import { IMeeting, IMeetingWithId } from "../meeting.model";
+import { MongooseMeeting } from "./meeting.mongoose.js";
+import { IMeeting, IMeetingWithId } from "../meeting.model.js";
 
 export class MongooseMeetingRepository {
   async findAll({ userId }: { userId: string }): Promise<IMeeting[]> {

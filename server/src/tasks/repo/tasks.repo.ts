@@ -1,5 +1,5 @@
-import { ITask } from "../task";
-import { IMongooseTask, MongooseTask } from "./tasks.mongoose";
+import { ITask } from "../task.js";
+import { IMongooseTask, MongooseTask } from "./tasks.mongoose.js";
 import mongoose from "mongoose";
 
 export class MongooseTaskRepository {

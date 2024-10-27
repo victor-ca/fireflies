@@ -1,6 +1,6 @@
-import { MeetingAccessService } from "../../auth/meeting-access.service";
+import { MeetingAccessService } from "../../auth/meeting-access.service.js";
 
-import { MeetingStatsRepository } from "../repo/meeting.stats.repo";
+import { MeetingStatsRepository } from "../repo/meeting.stats.repo.js";
 
 export class SecureMeetingStatsService {
   constructor(

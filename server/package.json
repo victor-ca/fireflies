@@ -9,8 +9,9 @@
   "scripts": {
     "start:database": "docker compose -f ../dev-ops/docker-compose-dev.yml up -d",
     "stop:database": "docker compose -f ../dev-ops/docker-compose-dev.yml stop",
-    "start": "node --import=tsx src/server.ts",
+    "start": "node dist/server.js",
     "dev": "nodemon --exec node --import=tsx src/server.ts",
+    "build": "tsc",
     "seed": "node --import=tsx src/seed.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },

@@ -1,5 +1,5 @@
-import { MongooseMeetingRepository } from "../meetings/repo/meeting.repository";
-import { NotFoundError, UnauthorizedError } from "./errors";
+import { MongooseMeetingRepository } from "../meetings/repo/meeting.repository.js";
+import { NotFoundError, UnauthorizedError } from "./errors.js";
 
 export class MeetingAccessService {
   constructor(
